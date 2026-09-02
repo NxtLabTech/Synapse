@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from app.cloner import gitmanager
+from app.cloner import GitManager
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -21,8 +21,8 @@ class RepoRequest(BaseModel):
 @app.post("/clone")
 async def clone_repository(request: RepoRequest):
     path = "./cloned_repo"
-    repo_cloner = gitmanager(request.url, path)
-    
+    repo_cloner = GitManager(request.url, path)
+
     is_repo_cloned = repo_cloner.clone_repo()
     
     if is_repo_cloned:
