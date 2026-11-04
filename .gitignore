@@ -3,10 +3,13 @@
 .env.*
 .venv
 
-# Ignore the temporary cloning directory
+# Ignore the temporary cloning directories
 backend/cloned_repo/
+backend/cloned_repos/
+cloned_repos/
 
 # Python specific ignores
 __pycache__/
 *.py[cod]
 backend/app/__pycache__/
+.pytest_cache/
