@@ -23,8 +23,7 @@ class GitManager:
     def clone_repo(self):
         if os.path.exists(self.cloning_path):
             print("The cloning path already exists. Removing it to avoid conflicts.")
-            # Use 'onerror' for Python < 3.12 compatibility
-            shutil.rmtree(self.cloning_path, onexc=self._remove_readonly)
+            shutil.rmtree(self.cloning_path, onerror=self._remove_readonly)
 
         try:
             print(f"Cloning repository from {self.remote_repo_url}...")
