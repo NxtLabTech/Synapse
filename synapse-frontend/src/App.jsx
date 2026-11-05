@@ -5,7 +5,8 @@ function App() {
   const [repoUrl, setRepoUrl] = useState('');
   const [status, setStatus] = useState({ message: '', type: '' }); // type: 'loading', 'success', or 'error'
 
-  const handleClone = async () => {
+  const handleClone = async (event) => {
+    event.preventDefault();
     if (!repoUrl) {
       setStatus({ message: 'Please enter a URL first.', type: 'error' });
       return;
@@ -28,7 +29,7 @@ function App() {
         // FastAPI returns errors in the 'detail' field
         setStatus({ message: data.detail || 'Cloning failed.', type: 'error' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ message: 'Cannot connect to the backend server. Is FastAPI running?', type: 'error' });
     }
   };
@@ -38,27 +39,26 @@ function App() {
       <h1>Synapse</h1>
       <p className="subtitle">Enter a GitHub repository URL to begin indexing logic.</p>
       
-      <div className="input-group">
-        <input
-          type="text"
-          placeholder="https://github.com/user/repo"
-          value={repoUrl}
-          onChange={(e) => setRepoUrl(e.target.value)}
-          disabled={status.type === 'loading'}
-        />
-        <button 
-          onClick={handleClone} 
-          disabled={status.type === 'loading'}
-        >
-          {status.type === 'loading' ? 'Cloning...' : 'Clone Repository'}
-        </button>
-      </div>
-
-      {status.message && (
-        <div className={`status-message ${status.type}`}>
-          {status.message}
+      <form className="clone-form" onSubmit={handleClone}>
+        <label htmlFor="repo-url">GitHub repository URL</label>
+        <div className="input-group">
+          <input
+            id="repo-url"
+            type="text"
+            placeholder="https://github.com/user/repo"
+            value={repoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+            disabled={status.type === 'loading'}
+          />
+          <button type="submit" disabled={status.type === 'loading'}>
+            {status.type === 'loading' ? 'Cloning...' : 'Clone Repository'}
+          </button>
         </div>
-      )}
+      </form>
+
+      <div className={`status-message ${status.type}`} role="status" aria-live="polite" aria-atomic="true">
+        {status.message}
+      </div>
     </div>
   );
 }

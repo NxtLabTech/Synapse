@@ -10,19 +10,34 @@
 h1 { font-size: 3rem; margin-bottom: 2rem; color: #646cff; }
 .subtitle { color: #888; margin-bottom: 2rem; }
 
+.clone-form {
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+}
+
+.clone-form label {
+  display: block;
+  margin-bottom: 8px;
+}
+
 .input-group {
   display: flex;
   gap: 10px;
   width: 100%;
-  max-width: 500px;
 }
 
 input {
   flex: 1;
+  min-width: 0;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  outline: none;
+}
+
+input:focus-visible, button:focus-visible {
+  outline: 3px solid #646cff;
+  outline-offset: 3px;
 }
 
 button {
@@ -42,6 +57,12 @@ button:disabled { background-color: #aaa; cursor: not-allowed; }
   padding: 10px 20px;
   border-radius: 6px;
   font-weight: 500;
+}
+
+.status-message:empty { margin: 0; padding: 0; }
+
+@media (max-width: 480px) {
+  .input-group { flex-direction: column; }
 }
 
 .loading { color: #2196f3; background: #e3f2fd; }
