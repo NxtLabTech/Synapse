@@ -13,6 +13,9 @@ services:
       - backend_cloned_repo:/app/cloned_repo
     environment:
       - PYTHONUNBUFFERED=1
+      # Tells the backend which origin the browser will send requests FROM.
+      # This must match the URL the user opens in their browser.
+      - FRONTEND_ORIGIN=http://localhost:5173
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - synapse-network
@@ -27,8 +30,11 @@ services:
     volumes:
       - ./synapse-frontend:/app
       - /app/node_modules
+    # VITE_API_URL tells the browser where to send API requests.
+    # Inside Docker the browser still runs on the HOST machine, so it must
+    # reach the backend via the host-exposed port, not the internal service name.
     environment:
-      - VITE_API_URL=http://backend:8000
+      - VITE_API_URL=http://localhost:8000
     command: npm run dev -- --host 0.0.0.0
     networks:
       - synapse-network

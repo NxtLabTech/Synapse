@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import './App.css';
 
+// VITE_API_URL is set at build time (or dev-server time) via a .env file or
+// the Docker Compose `environment:` block.  It falls back to the local
+// FastAPI address so plain `npm run dev` still works without any configuration.
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
 function App() {
   const [repoUrl, setRepoUrl] = useState('');
   const [status, setStatus] = useState({ message: '', type: '' }); // type: 'loading', 'success', or 'error'
 
   const handleClone = async () => {
-    if (!repoUrl) {
+    if (!repoUrl.trim()) {
       setStatus({ message: 'Please enter a URL first.', type: 'error' });
       return;
     }
@@ -14,7 +19,7 @@ function App() {
     setStatus({ message: 'Cloning in progress... This may take a moment.', type: 'loading' });
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/clone', {
+      const response = await fetch(`${API_BASE}/clone`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: repoUrl }),
@@ -28,7 +33,7 @@ function App() {
         // FastAPI returns errors in the 'detail' field
         setStatus({ message: data.detail || 'Cloning failed.', type: 'error' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ message: 'Cannot connect to the backend server. Is FastAPI running?', type: 'error' });
     }
   };
