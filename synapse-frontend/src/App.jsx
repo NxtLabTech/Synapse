@@ -28,7 +28,7 @@ function App() {
         // FastAPI returns errors in the 'detail' field
         setStatus({ message: data.detail || 'Cloning failed.', type: 'error' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ message: 'Cannot connect to the backend server. Is FastAPI running?', type: 'error' });
     }
   };
