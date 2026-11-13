@@ -21,7 +21,7 @@ class RepoRequest(BaseModel):
 @app.post("/clone")
 async def clone_repository(request: RepoRequest):
     path = "./cloned_repo"
-    repo_cloner = gitmanager(request.url, path)
+    repo_cloner = GitManager(request.url, path)
     
     is_repo_cloned = repo_cloner.clone_repo()
     
